@@ -1,0 +1,124 @@
+[[tags: egg]]
+
+== chunk-vector
+
+[[toc:]]
+
+=== Description
+
+A dyn-vector like library capable of storing other srfi-4 vectors inside a dense array.
+
+=== Author
+
+Richard van Roy (pluizer)
+
+=== Requirements
+
+none
+
+=== Documentation
+
+==== Procedures
+
+<procedure>(make-f32chunk-vector size [size-hint])</procedure><br/>
+<procedure>(make-f64chunk-vector size [size-hint])</procedure><br/>
+<procedure>(make-s8chunk-vector size [size-hint])</procedure><br/>
+<procedure>(make-s16chunk-vector size [size-hint])</procedure><br/>
+<procedure>(make-s32chunk-vector size [size-hint])</procedure><br/>
+<procedure>(make-u8chunk-vector size [size-hint])</procedure><br/>
+<procedure>(make-u16chunk-vector size [size-hint])</procedure><br/>
+<procedure>(make-u32chunk-vector size [size-hint])</procedure><br/>
+
+Create a new chunk vector with a chunk-size of /size/.
+
+<procedure>(f32vector-remove! vector index)</procedure><br/>
+<procedure>(f64vector-remove! vector index)</procedure><br/>
+<procedure>(s8vector-remove! vector index)</procedure><br/>
+<procedure>(s16vector-remove! vector index)</procedure><br/>
+<procedure>(s32vector-remove! vector index)</procedure><br/>
+<procedure>(u8vector-remove! vector index)</procedure><br/>
+<procedure>(u16vector-remove! vector index)</procedure><br/>
+<procedure>(u32vector-remove! vector index)</procedure><br/>
+
+Removes a chunk from the vector using its /index/.
+
+<procedure>(f32vector-set! vectror index value)</procedure><br/>
+<procedure>(f64vector-set! vectror index value)</procedure><br/>
+<procedure>(s8vector-set! vectror index value)</procedure><br/>
+<procedure>(s16vector-set! vectror index value)</procedure><br/>
+<procedure>(s32vector-set! vectror index value)</procedure><br/>
+<procedure>(u8vector-set! vectror index value)</procedure><br/>
+<procedure>(u16vector-set! vectror index value)</procedure><br/>
+<procedure>(u32vector-set! vectror index value)</procedure><br/>
+
+Changed the value of a chunk using its /index/.
+
+<procedure>(f32vector-push! vector value)</procedure><br/>
+<procedure>(f64vector-push! vector value)</procedure><br/>
+<procedure>(s8vector-push! vector value)</procedure><br/>
+<procedure>(s16vector-push! vector value)</procedure><br/>
+<procedure>(s32vector-push! vector value)</procedure><br/>
+<procedure>(u8vector-push! vector value)</procedure><br/>
+<procedure>(u16vector-push! vector value)</procedure><br/>
+<procedure>(u32vector-push! vector value)</procedure><br/>
+
+Pushes a new chunk to the vector.
+
+<procedure>(f32vector-ref vector index)</procedure><br/>
+<procedure>(f64vector-ref vector index)</procedure><br/>
+<procedure>(s8vector-ref vector index)</procedure><br/>
+<procedure>(s16vector-ref vector index)</procedure><br/>
+<procedure>(s32vector-ref vector index)</procedure><br/>
+<procedure>(u8vector-ref vector index)</procedure><br/>
+<procedure>(u16vector-ref vector index)</procedure><br/>
+<procedure>(u32vector-ref vector index)</procedure><br/>
+
+Returns the data at /index/.
+
+<procedure>(f32vector-length vector)</procedure><br/>
+<procedure>(f64vector-length vector)</procedure><br/>
+<procedure>(s8vector-length vector)</procedure><br/>
+<procedure>(s16vector-length vector)</procedure><br/>
+<procedure>(s32vector-length vector)</procedure><br/>
+<procedure>(u8vector-length vector)</procedure><br/>
+<procedure>(u16vector-length vector)</procedure><br/>
+<procedure>(u32vector-length vector)</procedure><br/>
+
+Returns the number of chunks in the vector.
+
+<procedure>(f32vector->pointer vector)</procedure><br/>
+<procedure>(f64vector->pointer vector)</procedure><br/>
+<procedure>(s8vector->pointer vector)</procedure><br/>
+<procedure>(s16vector->pointer vector)</procedure><br/>
+<procedure>(s32vector->pointer vector)</procedure><br/>
+<procedure>(u8vector->pointer vector)</procedure><br/>
+<procedure>(u16vector->pointer vector)</procedure><br/>
+<procedure>(u32vector->pointer vector)</procedure><br/>
+
+Returns a pointer to the dense foreign array where the data
+is stored.
+
+==== Example
+
+<enscript highlight="scheme">
+(use chunk-vector)
+
+;; Create a chunk-vector that holds f32vectors with the size of 2.
+(define v (make-f32chunk-vector 2))
+
+(define index-a (f32chunk-vector-push! v (f32vector 1 2)))
+
+(define index-b (f32chunk-vector-push! v (f32vector 3 4)))
+
+(define index-c (f32chunk-vector-push! v (f32vector 7 8)))
+
+(f32chunk-vector-remove! v index-c)
+
+(f32chunk-vector-set! v index-b (f32vector 0 0))
+
+(print (f32chunk-vector-ref v index-a)) ; => #f32(1.0 2.0)
+
+(print (f32chunk-vector-ref v index-b)) ; => #f32(0.0 0.0)
+
+(print (f32chunk-vector-ref v index-c)) ; undefined
+</enscript>
