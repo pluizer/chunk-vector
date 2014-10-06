@@ -200,3 +200,8 @@ void* dv_vector_data(DV_Vector* dv)
 {
 	return dv->data;
 }
+
+void dv_vector_clear(Dv_Vector* dv)
+{
+	
+}

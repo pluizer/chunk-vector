@@ -34,7 +34,7 @@ SOFTWARE.
 
 (define-foreign-type chunk-vector (c-pointer "DV_Vector"))
 
-(define-syntax define-chunk-vector
+(define-syntax %define-chunk-vector
   (ir-macro-transformer
    (lambda (exp inj cmp)
      (apply
@@ -45,18 +45,17 @@ SOFTWARE.
 
 	`(begin
 
-	   ;; (make-<type>chunk-vector size [size-hint])
+	   ;; (make-<type>chunk-vector chunk-size [size-hint])
 	   ;; Create a new chunk vector with a chunk-size of /size/.
 	   (define (,(symbol-append 'make- (inj <prefix>) 'chunk-vector)
-		    size #!optional (size-hint 64))
+		    chunk-size #!optional (size-hint 64))
 	     (set-finalizer!
 	      ((foreign-lambda chunk-vector "dv_vector_new"
 			       unsigned-integer unsigned-integer)
-	       (* size (foreign-type-size ,(inj <type-string>)))
+	       (* chunk-size (foreign-type-size ,(inj <type-string>)))
 	       size-hint)
 	      (foreign-lambda void "dv_vector_free" chunk-vector)))
 	   
-
 	   ;; (<type>vector-remove! vector index)
 	   ;; Removes a chunk from the vector using its /index/.
 	   (define ,(symbol-append (inj <prefix>) 'chunk-vector-remove!)
@@ -73,11 +72,9 @@ SOFTWARE.
 	   (define (,(symbol-append (inj <prefix>) 'chunk-vector-push!)
 		    chunk-vector data)
 	     (let ((grown (make-u32vector 1)))
-	       (values
-		((foreign-lambda unsigned-integer "dv_vector_push" 
-				 chunk-vector ,(inj <vector-type>) u32vector)
-		 chunk-vector data grown)
-		(u32vector-ref grown 0))))
+	       ((foreign-lambda unsigned-integer "dv_vector_push" 
+				chunk-vector ,(inj <vector-type>) u32vector)
+		chunk-vector data grown)))
 
 	   ;; (<type>vector-ref vector index)
 	   ;; Returns the data at /index/.
@@ -107,13 +104,74 @@ SOFTWARE.
 
 	   )) exp))))
 
-(define-chunk-vector f32 "float"    make-f32vector f32vector)
-(define-chunk-vector f64 "double"   make-f64vector f64vector)
-(define-chunk-vector s8  "int8_t"   make-s8vector  s8vector)
-(define-chunk-vector s16 "int16_t"  make-s16vector s16vector)
-(define-chunk-vector s32 "int32_t"  make-s32vector s32vector)
-(define-chunk-vector u8  "uint8_t"  make-u8vector  u8vector)
-(define-chunk-vector u16 "uint16_t" make-u16vector u16vector)
-(define-chunk-vector u32 "uint32_t" make-u32vector u32vector)
+(%define-chunk-vector f32 "float"    make-f32vector f32vector)
+(%define-chunk-vector f64 "double"   make-f64vector f64vector)
+(%define-chunk-vector s8  "int8_t"   make-s8vector  s8vector)
+(%define-chunk-vector s16 "int16_t"  make-s16vector s16vector)
+(%define-chunk-vector s32 "int32_t"  make-s32vector s32vector)
+(%define-chunk-vector u8  "uint8_t"  make-u8vector  u8vector)
+(%define-chunk-vector u16 "uint16_t" make-u16vector u16vector)
+(%define-chunk-vector u32 "uint32_t" make-u32vector u32vector)
+
+;; General
+(define (make-chunk-vector type chunk-length #!optional (size-hint 64))
+  (let* ((funcs
+	  (case type
+	    ((char: int8: byte:) 
+	     (list make-s8chunk-vector s8chunk-vector-push!
+		   s8chunk-vector-remove! s8chunk-vector-set! 
+		   s8chunk-vector-ref s8chunk-vector-length
+		   s8chunk-vector->pointer))
+	    ((uchar: uint8: unsigned-byte:)
+	     (list make-u8chunk-vector u8chunk-vector-push!
+		   u8chunk-vector-remove! u8chunk-vector-set! 
+		   u8chunk-vector-ref u8chunk-vector-length
+		   u8chunk-vector->pointer))
+	    ((short: int16:)
+	     (list make-s16chunk-vector s16chunk-vector-push!
+		   s16chunk-vector-remove! s16chunk-vector-set! 
+		   s16chunk-vector-ref s16chunk-vector-length
+		   s16chunk-vector->pointer))
+	    ((ushort: uint16: unsigned-short:)
+	     (list make-u16chunk-vector u16chunk-vector-push!
+		   u16chunk-vector-remove! u16chunk-vector-set! 
+		   u16chunk-vector-ref u16chunk-vector-length
+		   u16chunk-vector->pointer))
+	    ((int: int32: integer: integer32:)
+	     (list make-s32chunk-vector s32chunk-vector-push!
+		   s32chunk-vector-remove! s32chunk-vector-set! 
+		   s32chunk-vector-ref s32chunk-vector-length
+		   s32chunk-vector->pointer))
+	    ((uint: uint32: unsigned-int: unsigned-int32:
+		    unsigned-make-integer: unsigned
+		    integer: unsigned-integer32:)
+	     (list make-u32chunk-vector u32chunk-vector-push!
+		   u32chunk-vector-remove! u32chunk-vector-set!
+		   u32chunk-vector-ref u32chunk-vector-length
+		   u32chunk-vector->pointer))
+	    ((float: float32:)
+	     (list make-f32chunk-vector f32chunk-vector-push!
+		   f32chunk-vector-remove! f32chunk-vector-set! 
+		   f32chunk-vector-ref f32chunk-vector-length
+		   f32chunk-vector->pointer))
+	    ((double: float64:)
+	     (list make-f64chunk-vector f64chunk-vector-push!
+		   f64chunk-vector-remove! f64chunk-vector-set! 
+		   f64chunk-vector-ref f64chunk-vector-length
+		   f64chunk-vector->pointer))))
+	 (vector ((car funcs) chunk-length size-hint)))
+    (apply (lambda (_ push! remove! set! ref length pointer)
+	     (lambda (com #!rest args)
+	       (apply (case com
+			((push!) push!)
+			((remove!) remove!)
+			((set!) set!)
+			((ref) ref)
+			((length) length)
+			((pointer) pointer)
+			((type) (lambda (_) type))
+			(else (assert #f)))
+		      (cons vector args))))
+	   funcs)))
 
 )
