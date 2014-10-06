@@ -29,71 +29,71 @@ none
 <procedure>(make-u16chunk-vector size [size-hint])</procedure><br/>
 <procedure>(make-u32chunk-vector size [size-hint])</procedure><br/>
 
-Create a new chunk vector with a chunk-size of /size/.
+Create a new chunk vector with a chunk-size of ''size''.
 
-<procedure>(f32vector-remove! vector index)</procedure><br/>
-<procedure>(f64vector-remove! vector index)</procedure><br/>
-<procedure>(s8vector-remove! vector index)</procedure><br/>
-<procedure>(s16vector-remove! vector index)</procedure><br/>
-<procedure>(s32vector-remove! vector index)</procedure><br/>
-<procedure>(u8vector-remove! vector index)</procedure><br/>
-<procedure>(u16vector-remove! vector index)</procedure><br/>
-<procedure>(u32vector-remove! vector index)</procedure><br/>
+<procedure>(f32chunk-vector-remove! vector index)</procedure><br/>
+<procedure>(f64chunk-vector-remove! vector index)</procedure><br/>
+<procedure>(s8chunk-vector-remove! vector index)</procedure><br/>
+<procedure>(s16chunk-vector-remove! vector index)</procedure><br/>
+<procedure>(s32chunk-vector-remove! vector index)</procedure><br/>
+<procedure>(u8chunk-vector-remove! vector index)</procedure><br/>
+<procedure>(u16chunk-vector-remove! vector index)</procedure><br/>
+<procedure>(u32chunk-vector-remove! vector index)</procedure><br/>
 
-Removes a chunk from the vector using its /index/.
+Removes a chunk from the vector using its ''index''.
 
-<procedure>(f32vector-set! vectror index value)</procedure><br/>
-<procedure>(f64vector-set! vectror index value)</procedure><br/>
-<procedure>(s8vector-set! vectror index value)</procedure><br/>
-<procedure>(s16vector-set! vectror index value)</procedure><br/>
-<procedure>(s32vector-set! vectror index value)</procedure><br/>
-<procedure>(u8vector-set! vectror index value)</procedure><br/>
-<procedure>(u16vector-set! vectror index value)</procedure><br/>
-<procedure>(u32vector-set! vectror index value)</procedure><br/>
+<procedure>(f32chunk-vector-set! vectror index value)</procedure><br/>
+<procedure>(f64chunk-vector-set! vectror index value)</procedure><br/>
+<procedure>(s8chunk-vector-set! vectror index value)</procedure><br/>
+<procedure>(s16chunk-vector-set! vectror index value)</procedure><br/>
+<procedure>(s32chunk-vector-set! vectror index value)</procedure><br/>
+<procedure>(u8chunk-vector-set! vectror index value)</procedure><br/>
+<procedure>(u16chunk-vector-set! vectror index value)</procedure><br/>
+<procedure>(u32chunk-vector-set! vectror index value)</procedure><br/>
 
-Changed the value of a chunk using its /index/.
+Changed the value of a chunk using its ''index''.
 
-<procedure>(f32vector-push! vector value)</procedure><br/>
-<procedure>(f64vector-push! vector value)</procedure><br/>
-<procedure>(s8vector-push! vector value)</procedure><br/>
-<procedure>(s16vector-push! vector value)</procedure><br/>
-<procedure>(s32vector-push! vector value)</procedure><br/>
-<procedure>(u8vector-push! vector value)</procedure><br/>
-<procedure>(u16vector-push! vector value)</procedure><br/>
-<procedure>(u32vector-push! vector value)</procedure><br/>
+<procedure>(f32chunk-vector-push! vector value)</procedure><br/>
+<procedure>(f64chunk-vector-push! vector value)</procedure><br/>
+<procedure>(s8chunk-vector-push! vector value)</procedure><br/>
+<procedure>(s16chunk-vector-push! vector value)</procedure><br/>
+<procedure>(s32chunk-vector-push! vector value)</procedure><br/>
+<procedure>(u8chunk-vector-push! vector value)</procedure><br/>
+<procedure>(u16chunk-vector-push! vector value)</procedure><br/>
+<procedure>(u32chunk-vector-push! vector value)</procedure><br/>
 
 Pushes a new chunk to the vector.
 
-<procedure>(f32vector-ref vector index)</procedure><br/>
-<procedure>(f64vector-ref vector index)</procedure><br/>
-<procedure>(s8vector-ref vector index)</procedure><br/>
-<procedure>(s16vector-ref vector index)</procedure><br/>
-<procedure>(s32vector-ref vector index)</procedure><br/>
-<procedure>(u8vector-ref vector index)</procedure><br/>
-<procedure>(u16vector-ref vector index)</procedure><br/>
-<procedure>(u32vector-ref vector index)</procedure><br/>
+<procedure>(f32chunk-vector-ref vector index)</procedure><br/>
+<procedure>(f64chunk-vector-ref vector index)</procedure><br/>
+<procedure>(s8chunk-vector-ref vector index)</procedure><br/>
+<procedure>(s16chunk-vector-ref vector index)</procedure><br/>
+<procedure>(s32chunk-vector-ref vector index)</procedure><br/>
+<procedure>(u8chunk-vector-ref vector index)</procedure><br/>
+<procedure>(u16chunk-vector-ref vector index)</procedure><br/>
+<procedure>(u32chunk-vector-ref vector index)</procedure><br/>
 
-Returns the data at /index/.
+Returns the data at ''index''.
 
-<procedure>(f32vector-length vector)</procedure><br/>
-<procedure>(f64vector-length vector)</procedure><br/>
-<procedure>(s8vector-length vector)</procedure><br/>
-<procedure>(s16vector-length vector)</procedure><br/>
-<procedure>(s32vector-length vector)</procedure><br/>
-<procedure>(u8vector-length vector)</procedure><br/>
-<procedure>(u16vector-length vector)</procedure><br/>
-<procedure>(u32vector-length vector)</procedure><br/>
+<procedure>(f32chunk-vector-length vector)</procedure><br/>
+<procedure>(f64chunk-vector-length vector)</procedure><br/>
+<procedure>(s8chunk-vector-length vector)</procedure><br/>
+<procedure>(s16chunk-vector-length vector)</procedure><br/>
+<procedure>(s32chunk-vector-length vector)</procedure><br/>
+<procedure>(u8chunk-vector-length vector)</procedure><br/>
+<procedure>(u16chunk-vector-length vector)</procedure><br/>
+<procedure>(u32chunk-vector-length vector)</procedure><br/>
 
 Returns the number of chunks in the vector.
 
-<procedure>(f32vector->pointer vector)</procedure><br/>
-<procedure>(f64vector->pointer vector)</procedure><br/>
-<procedure>(s8vector->pointer vector)</procedure><br/>
-<procedure>(s16vector->pointer vector)</procedure><br/>
-<procedure>(s32vector->pointer vector)</procedure><br/>
-<procedure>(u8vector->pointer vector)</procedure><br/>
-<procedure>(u16vector->pointer vector)</procedure><br/>
-<procedure>(u32vector->pointer vector)</procedure><br/>
+<procedure>(f32chunk-vector->pointer vector)</procedure><br/>
+<procedure>(f64chunk-vector->pointer vector)</procedure><br/>
+<procedure>(s8chunk-vector->pointer vector)</procedure><br/>
+<procedure>(s16chunk-vector->pointer vector)</procedure><br/>
+<procedure>(s32chunk-vector->pointer vector)</procedure><br/>
+<procedure>(u8chunk-vector->pointer vector)</procedure><br/>
+<procedure>(u16chunk-vector->pointer vector)</procedure><br/>
+<procedure>(u32chunk-vector->pointer vector)</procedure><br/>
 
 Returns a pointer to the dense foreign array where the data
 is stored.
