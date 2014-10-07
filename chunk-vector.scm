@@ -102,6 +102,12 @@ SOFTWARE.
 	   (define ,(symbol-append (inj <prefix>) 'chunk-vector->pointer)
 	     (foreign-lambda c-pointer "dv_vector_data" chunk-vector))
 
+	   ;; <type>vector-chunk-size
+	   ;; Returns a pointer to the dense foreign array where the data
+	   ;; is stored.
+	   (define ,(symbol-append (inj <prefix>) 'chunk-vector-chunk-size)
+	     (foreign-lambda c-pointer "dv_vector_chunk_size" chunk-vector))
+
 	   )) exp))))
 
 (%define-chunk-vector f32 "float"    make-f32vector f32vector)
@@ -121,46 +127,46 @@ SOFTWARE.
 	     (list make-s8chunk-vector s8chunk-vector-push!
 		   s8chunk-vector-remove! s8chunk-vector-set! 
 		   s8chunk-vector-ref s8chunk-vector-length
-		   s8chunk-vector->pointer))
+		   s8chunk-vector->pointer s8chunk-vector-chunk-size ))
 	    ((uchar: uint8: unsigned-byte:)
 	     (list make-u8chunk-vector u8chunk-vector-push!
 		   u8chunk-vector-remove! u8chunk-vector-set! 
 		   u8chunk-vector-ref u8chunk-vector-length
-		   u8chunk-vector->pointer))
+		   u8chunk-vector->pointer u8chunk-vector-chunk-size))
 	    ((short: int16:)
 	     (list make-s16chunk-vector s16chunk-vector-push!
 		   s16chunk-vector-remove! s16chunk-vector-set! 
 		   s16chunk-vector-ref s16chunk-vector-length
-		   s16chunk-vector->pointer))
+		   s16chunk-vector->pointer s16chunk-vector-chunk-size))
 	    ((ushort: uint16: unsigned-short:)
 	     (list make-u16chunk-vector u16chunk-vector-push!
 		   u16chunk-vector-remove! u16chunk-vector-set! 
 		   u16chunk-vector-ref u16chunk-vector-length
-		   u16chunk-vector->pointer))
+		   u16chunk-vector->pointer u16chunk-vector-chunk-size))
 	    ((int: int32: integer: integer32:)
 	     (list make-s32chunk-vector s32chunk-vector-push!
 		   s32chunk-vector-remove! s32chunk-vector-set! 
 		   s32chunk-vector-ref s32chunk-vector-length
-		   s32chunk-vector->pointer))
+		   s32chunk-vector->pointer s32chunk-vector-chunk-size))
 	    ((uint: uint32: unsigned-int: unsigned-int32:
 		    unsigned-make-integer: unsigned
 		    integer: unsigned-integer32:)
 	     (list make-u32chunk-vector u32chunk-vector-push!
 		   u32chunk-vector-remove! u32chunk-vector-set!
 		   u32chunk-vector-ref u32chunk-vector-length
-		   u32chunk-vector->pointer))
+		   u32chunk-vector->pointer u32chunk-vector-chunk-size))
 	    ((float: float32:)
 	     (list make-f32chunk-vector f32chunk-vector-push!
 		   f32chunk-vector-remove! f32chunk-vector-set! 
 		   f32chunk-vector-ref f32chunk-vector-length
-		   f32chunk-vector->pointer))
+		   f32chunk-vector->pointer f32chunk-vector-chunk-size))
 	    ((double: float64:)
 	     (list make-f64chunk-vector f64chunk-vector-push!
 		   f64chunk-vector-remove! f64chunk-vector-set! 
 		   f64chunk-vector-ref f64chunk-vector-length
-		   f64chunk-vector->pointer))))
+		   f64chunk-vector->pointer f64chunk-vector-chunk-size))))
 	 (vector ((car funcs) chunk-length size-hint)))
-    (apply (lambda (_ push! remove! set! ref length pointer)
+    (apply (lambda (_ push! remove! set! ref length pointer chunk-size)
 	     (lambda (com #!rest args)
 	       (apply (case com
 			((push!) push!)
@@ -169,6 +175,7 @@ SOFTWARE.
 			((ref) ref)
 			((length) length)
 			((pointer) pointer)
+			((chunk-size) chunk-size)
 			((type) (lambda (_) type))
 			(else (assert #f)))
 		      (cons vector args))))
@@ -191,6 +198,9 @@ SOFTWARE.
 
 (define (chunk-vector->pointer vector)
   (vector 'pointer))
+
+(define (chunk-vector-chunk-size vector)
+  (vector 'chunk-size))
 
 (define (chunk-vector-type vector)
   (vector 'type))
