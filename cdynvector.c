@@ -181,6 +181,25 @@ void* dv_vector_ref(DV_Vector* dv, unsigned index)
 	return dv->data+(dv->chunk_size * dv->indices[index]);
 }
 
+void dv_vector_clear(DV_Vector* dv)
+{
+	free(dv->data);
+	free(dv->indices);
+	free_index_stack(dv->available_stack);
+	free_index_stack(dv->last_stack);
+	dv->size = 0;
+	/* it is likely that the vector will be around the same size
+	   again, but we'll shrink it a little so it doesn't grow
+	   out of bounds */
+	dv->size_hint *= .8;
+	dv->indices = smalloc(sizeof(unsigned)*dv->size_hint);
+	memset(dv->indices, 0, sizeof(unsigned)*dv->size_hint);
+	dv->available_stack = new_index_stack(dv->size_hint);
+	dv->last_stack = new_index_stack(dv->size_hint);
+	dv->data = smalloc(dv->chunk_size  * dv->size_hint);
+	memset(dv->data, 0, dv->chunk_size * dv->size_hint);
+}
+
 unsigned dv_vector_chunk_size(DV_Vector* dv)
 {
 	return dv->chunk_size;

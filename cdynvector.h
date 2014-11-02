@@ -48,6 +48,8 @@ extern void dv_vector_change(DV_Vector* dv, unsigned index, void* chunk);
 
 extern void* dv_vector_ref(DV_Vector* dv, unsigned index);
 
+extern void dv_vector_clear(DV_Vector* dv);
+
 extern unsigned dv_vector_chunk_size(DV_Vector* dv);
 
 extern unsigned dv_vector_size(DV_Vector* dv);
