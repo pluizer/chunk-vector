@@ -106,10 +106,9 @@ SOFTWARE.
 	     (foreign-lambda c-pointer "dv_vector_data" chunk-vector))
 
 	   ;; <type>vector-chunk-size
-	   ;; Returns a pointer to the dense foreign array where the data
-	   ;; is stored.
+	   ;; Returns the size of the chunk.
 	   (define ,(compose-name <prefix> 'chunk-vector-chunk-size)
-	     (foreign-lambda c-pointer "dv_vector_chunk_size" chunk-vector))
+	     (foreign-lambda unsigned-integer "dv_vector_chunk_size" chunk-vector))
 
 	   ;; <type>vector-clear!
 	   ;; Returns a pointer to the dense foreign array where the data
