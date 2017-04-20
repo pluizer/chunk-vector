@@ -43,11 +43,14 @@ SOFTWARE.
 	(define %chunk-size
 	  `(foreign-lambda unsigned-integer "dv_vector_chunk_size" chunk-vector))
 
+        (define (compose-name . args)
+          (inj (apply symbol-append (map strip-syntax args))))
+
 	`(begin
 
 	   ;; (make-<type>chunk-vector chunk-size [size-hint])
 	   ;; Create a new chunk vector with a chunk-size of /size/.
-	   (define (,(symbol-append 'make- (inj <prefix>) 'chunk-vector)
+	   (define (,(compose-name 'make- <prefix> 'chunk-vector)
 		    chunk-size #!optional (size-hint 64))
 	     (set-finalizer!
 	      ((foreign-lambda chunk-vector "dv_vector_new"
@@ -58,18 +61,18 @@ SOFTWARE.
 	   
 	   ;; (<type>vector-remove! vector index)
 	   ;; Removes a chunk from the vector using its /index/.
-	   (define ,(symbol-append (inj <prefix>) 'chunk-vector-remove!)
+	   (define ,(compose-name <prefix> 'chunk-vector-remove!)
 	     (foreign-lambda void "dv_vector_remove" chunk-vector unsigned-integer))
 
 	   ;; (<type>vector-set! vectror index value)
 	   ;; Changed the value of a chunk using its /index/.
-	   (define ,(symbol-append (inj <prefix>) 'chunk-vector-set!)
+	   (define ,(compose-name <prefix> 'chunk-vector-set!)
 	     (foreign-lambda void "dv_vector_change" chunk-vector 
 			     unsigned-integer ,(inj <vector-type>)))
 
 	   ;; (<type>vector-push! vector value)
 	   ;; Pushes a new chunk to the vector.
-	   (define (,(symbol-append (inj <prefix>) 'chunk-vector-push!)
+	   (define (,(compose-name <prefix> 'chunk-vector-push!)
 		    chunk-vector data)
 	     (let ((grown (make-u32vector 1)))
 	       ((foreign-lambda unsigned-integer "dv_vector_push" 
@@ -78,7 +81,7 @@ SOFTWARE.
 
 	   ;; (<type>vector-ref vector index)
 	   ;; Returns the data at /index/.
-	   (define (,(symbol-append (inj <prefix>) 'chunk-vector-ref)
+	   (define (,(compose-name <prefix> 'chunk-vector-ref)
 		    chunk-vector index)
 	     (let* ((chunk-size (,%chunk-size chunk-vector))
 		    (size (/ chunk-size (foreign-type-size ,(inj <type-string>))))
@@ -93,25 +96,24 @@ SOFTWARE.
 
 	   ;; (<type>vector-length vector)
 	   ;; Returns the number of chunks in the vector.
-	   (define ,(symbol-append (inj <prefix>) 'chunk-vector-length)
+	   (define ,(compose-name <prefix> 'chunk-vector-length)
 	     (foreign-lambda unsigned-integer "dv_vector_size" chunk-vector))
 
 	   ;; <type>vector->pointer
 	   ;; Returns a pointer to the dense foreign array where the data
 	   ;; is stored.
-	   (define ,(symbol-append (inj <prefix>) 'chunk-vector->pointer)
+	   (define ,(compose-name <prefix> 'chunk-vector->pointer)
 	     (foreign-lambda c-pointer "dv_vector_data" chunk-vector))
 
 	   ;; <type>vector-chunk-size
-	   ;; Returns a pointer to the dense foreign array where the data
-	   ;; is stored.
-	   (define ,(symbol-append (inj <prefix>) 'chunk-vector-chunk-size)
-	     (foreign-lambda c-pointer "dv_vector_chunk_size" chunk-vector))
+	   ;; Returns the size of the chunk.
+	   (define ,(compose-name <prefix> 'chunk-vector-chunk-size)
+	     (foreign-lambda unsigned-integer "dv_vector_chunk_size" chunk-vector))
 
 	   ;; <type>vector-clear!
 	   ;; Returns a pointer to the dense foreign array where the data
 	   ;; is stored.
-	   (define ,(symbol-append (inj <prefix>) 'chunk-vector-clear!)
+	   (define ,(compose-name <prefix> 'chunk-vector-clear!)
 	     (foreign-lambda void "dv_vector_clear" chunk-vector))
 
 	   )) exp))))
